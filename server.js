@@ -1,10 +1,10 @@
-import translate from "google-translate-api-x";
+import express from 'express';
+import translate from 'google-translate-api-x';
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Chỉ hỗ trợ POST" });
-  }
+const app = express();
+app.use(express.json()); // parse JSON body
 
+app.post('/translate', async (req, res) => {
   const { text, target } = req.body;
 
   if (!text || !target) {
@@ -17,7 +17,8 @@ export default async function handler(req, res) {
   } catch (error) {
     res.status(500).json({ error: "Lỗi dịch thuật." });
   }
-}
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
